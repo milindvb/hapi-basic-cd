@@ -26,13 +26,13 @@ server.route({
             timeout: false
         }
     },
-    handler: (request, response) => {
+    handler: (request, h) => {
         var result = [];
         for(var i = 0; i < request.payload["file"].length; i++) {
             result.push(request.payload["file"][i].hapi);
             request.payload["file"][i].pipe(fs.createWriteStream(__dirname + "/uploads/" + request.payload["file"][i].hapi.filename))
         }
-        response(result);
+        return result;
     }
 });
 
