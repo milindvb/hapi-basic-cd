@@ -6,11 +6,12 @@ server.connection({
     port: process.env.PORT || 8080
 });
 
+
 server.route({
-    path: '/',
     method: 'GET',
-    handler: function(request, reply) {
-        reply('hello');
+    path: '/',
+    handler: (request, h) => {
+        return 'Hello, world!';
     }
 });
 
