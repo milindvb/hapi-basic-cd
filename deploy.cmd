@@ -106,15 +106,6 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 
-:: 4. Build the website
-IF EXIST "%DEPLOYMENT_TEMP%\scripts\build.js" (
-  pushd "%DEPLOYMENT_TEMP%"
-  echo "Building web site"
-  call npm run build
-  if !ERRORLEVEL! NEQ 0 goto error
-  popd
-)
-
 :: 5. KuduSync to DEPLOYMENT_TARGET
 echo "Syncing site to Deployment Target"
 call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%\build" -t "%DEPLOYMENT_TARGET%" -x true -i ".git;.hg;.deployment;deploy.cmd"
