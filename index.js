@@ -69,7 +69,7 @@ init();
 
 const Hapi = require("hapi");
 const fs = require("fs");
-const server = Hapi.server({  
+const server = new Hapi.server({  
   host: 'localhost',
   port: 3000
 });
