@@ -83,10 +83,10 @@ server.route({
 });
 
 server.start(error => {
-   if(error) {
-   throw error;
-}
-console.log("Listening at " + server.info.uri);
+      if(error) {
+      throw error;
+   }
+   console.log("Listening at " + server.info.uri);
 }); 
  
 
