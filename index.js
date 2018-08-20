@@ -70,8 +70,8 @@ init();
 const Hapi = require("hapi");
 const fs = require("fs");
 const server = new Hapi.Server({
-   "host": process.env.HOST || 'localhost',
-   "port": process.env.PORT || 3000
+   host : process.env.HOST || 'localhost',
+   port : process.env.PORT || 3000
 });
 
 server.route({
