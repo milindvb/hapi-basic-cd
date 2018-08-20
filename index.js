@@ -23,7 +23,7 @@ if (!module.parent) {
 }
 
 module.exports = server;
-*/
+
 
 'use strict';
 
@@ -65,3 +65,28 @@ process.on('unhandledRejection', (err) => {
 });
 
 init();
+*/
+
+const Hapi = require("hapi");
+const fs = require("fs");
+const server = new Hapi.Server({
+   "host": process.env.HOST || 'localhost',
+   "port": process.env.PORT || 3000
+});
+
+server.route({
+   method: 'GET',
+   path: '/',
+   handler: (request, h) => {
+      return 'Hello, world!';
+   }
+});
+
+server.start(error => {
+   if(error) {
+   throw error;
+}
+console.log("Listening at " + server.info.uri);
+}); 
+ 
+
