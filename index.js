@@ -1,92 +1,58 @@
-/*
-var hapi = require('hapi');
-var server = new hapi.Server();
+const Hapi = require("hapi");
+const fs = require("fs");
 
-server.connection({
-    host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 8080
-});
-
-
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, h) => {
-        return 'Hello, world!';
-    }
-});
-
-if (!module.parent) {
-    server.start(function() {
-        console.log('Server started: ' + server.info.uri);
+const server = new Hapi.Server({
+        "host": process.env.HOST || 'localhost',
+        "port": process.env.PORT || 3000
     });
-}
-
-module.exports = server;
-
-
-'use strict';
-
-const Hapi = require('hapi');
-
-const server = Hapi.server({
-    port: 3000,
-    host: 'localhost'
-});
 
 server.route({
     method: 'GET',
     path: '/',
     handler: (request, h) => {
-
         return 'Hello, world!';
     }
 });
 
 server.route({
-    method: 'GET',
-    path: '/{name}',
-    handler: (request, h) => {
-
-        return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
+     method: 'POST',
+     path: '/submit',
+     config: { 	 
+     	payload: {
+         	output: 'stream',
+         	parse: true,
+         	allow: 'multipart/form-data',
+            maxBytes: 1000000000 
+     	},    	 
+        handler: function (request, reply) {
+             	var data = request.payload;
+             	if (data.file) {
+                 	var name = data.file.hapi.filename;
+                 	var path = __dirname + "/uploads/" + name;
+                 	var file = fs.createWriteStream(path);
+                 	 
+                 	file.on('error', function (err) { 
+                 	    console.error(err) 
+                 	});
+                 	 
+                 	data.file.pipe(file);
+                 	 
+                 	data.file.on('end', function (err) { 
+                     	var ret = {
+                         	filename: data.file.hapi.filename,
+                         	headers: data.file.hapi.headers
+                     	}
+                 	    reply(JSON.stringify(ret));
+                 	})
+             	}
+        }
     }
 });
 
-const init = async () => {
 
-    await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
-};
-
-process.on('unhandledRejection', (err) => {
-
-    console.log(err);
-    process.exit(1);
+server.start(error => {
+    if(error) {
+        throw error;
+    }
+    console.log("Listening at " + server.info.uri);
 });
-
-init();
-*/
-
-const Hapi = require("hapi");
-const fs = require("fs");
-const server = new Hapi.server({  
-  host: 'localhost',
-  port: 3000
-});
-
-server.route({
-   method: 'GET',
-   path: '/',
-   handler: (request, h) => {
-      return 'Hello, world!';
-   }
-});
-
-server.start(error => {
-      if(error) {
-      throw error;
-   }
-   console.log("Listening at " + server.info.uri);
-}); 
- 
-
