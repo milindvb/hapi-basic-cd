@@ -32,7 +32,9 @@ server.route({
             result.push(request.payload["file"][i].hapi);
             request.payload["file"][i].pipe(fs.createWriteStream(__dirname + "/uploads/" + request.payload["file"][i].hapi.filename))
         }
-        return result;
+        const response = h.response('<html><head><title>done upload</title></head><body>Hello</body></html>');
+        response.type("text/html");
+        return response;
     }
 });
 
